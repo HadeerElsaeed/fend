@@ -23,13 +23,35 @@
  * 
 */
 
+const sections = Array.from(document.querySelectorAll('section')); 
+const navMenu = document.getElementById('navbar_list'); 
+let listOfItems = sections.length;
 
 /**
  * End Global Variables
  * Start Helper Functions
  * 
 */
+function createListOfItems(){ 
+for (section of sections){ 
+sectionName = section.getAttribute('data-nav'); 
+sectionId = section.getAttribute('id'); 
+listItem = document.createElement('li'); 
+listItem.innerHTML = `<a class="menu link" href="#{sectionName}>${sectionId}</a>"` 
+menu.appendhild(listItem); 
+} 
+} 
 
+function toggleActiveClass(){ 
+for (section of sections) { 
+if (sectionInViewPort(section)){ 
+if ( section.classList.contains('your-active-class')){
+ section.classList.add('your-active-class'); 
+} 
+}else { section.classList.remove('your-active-class'); 
+} 
+} 
+}
 
 
 /**
@@ -43,6 +65,7 @@
 
 // Add class 'active' to section when near top of viewport
 
+document.addEventListener('scroll', toggleActiveClass)
 
 // Scroll to anchor ID using scrollTO event
 

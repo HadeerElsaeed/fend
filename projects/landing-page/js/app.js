@@ -22,6 +22,34 @@
  * Define Global Variables
  * 
 */
+function createListOfItems(){
+    for (section of sections){
+        sectionName = section.getAttribute('data-nav');
+        sectionId = section.getAttribute('id');
+        listItem = document.createElement('li');
+        listItem.innerHTML = `<a class="menu link" href="#{sectionName}>${sectionId}</a>"`
+        menu.appendhild(listItem);
+    }
+}
+
+function toggleActiveClass(){
+    for (section of sections) {
+        if (sectionInViewPort(section)){
+            if ( section.classList.contains('your-active-class')){
+                section.classList.add('your-active-class');
+            }
+        }else {
+            section.classList.remove('your-active-class');
+        }
+    }
+}
+
+
+// build the nav
+createListOfItems();
+
+// Add class 'active' to section when near top of viewport
+document.addEventListener('scroll', toggleActiveClass);
 
 
 /**

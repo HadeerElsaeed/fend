@@ -1,111 +1,94 @@
-body{
-    background: #fffff8;
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+/* Global Variables */
+
+// Create a new date instance dynamically with JS
+let d = new Date();
+let newDate = d.getMonth()+'.'+ d.getDate()+'.'+ d.getFullYear();
+
+//The URL to retrieve weather info from API
+const baseURL = "https://home.openweathermap.org/api_keys";
+
+//My API key for openweathermap API
+const apiKey=",&appidf79130fe99067b31d3323a6d23db1289=metric";
+
+//Generate data
+const generateData = () => {
+    const zip = document.getElementById("zip").value;
+    const feelings = document.getElementById("feelings").value;
 }
+//get weather data return
+const getWeatherData = (zip).then((data) => {
+    if(data){
+        const {
+            main: {temp},
+            name: city,
+            weather: [{description}],
+        } = data;
+        const info= {
+            newDate,
+            city,
+            temp: Math.round(temp),
+            discription,
+            feelings,
+        };
+        postData(server + "/add", info);
+        upadtingUi();
+        document.getElementById("entry").style.opacity = 1;
+    }
+});
 
-#app{
-    display: grid;
-    grid-auto-rows: minmax(150px, auto);
-    /* grid-template-columns:  */
-    height:100vh;
-    background: #f23557;
-    color: #f0d43a;
-    justify-content: center;
-    grid-gap: 1em;
-    font-size: 20px;
-    font-family: 'Oswald', sans-serif;
+//Function called by evenr listener
+document.getElementById("generate").addEventListener("click" , generateData);
+
+//Function to get API data
+const getWeatherData = async(zip) =>{
+    try{
+        const res= await fetch(baseURL + zip + apiKey);
+        const data= await res.json();
+
+        if(data.code != 200){
+            error.innerHtml = data.message;
+            setTimeout(_=> error.innerHtml = '' , 2000)
+        }
+        return data;
+    }
+    catch(error){
+        console.log(error);
+    }
+};
+
+//Function to post data
+const postData= async  (url = "", info = {})=> {
+    const res = await fetch(url, {
+        method = post,
+        headers: {
+            "conent-type": "application/json",
+
+        },
+        body: JSON.stringify(info),
+    });
+    try{
+        const newData= await res.json();
+        console.log("you saved " , newData);
+        return newData;
+    }
+    catch(error){
+        console.log(error);
+    }
+
+};
+
+//Get project data
+const upadtingUi= async()=>{
+    const res = await fetch (server + "/all");
+    try{
+        const savedData= await res.json();
+        document.addEventListener("date").innerHtml = savedData.newDate;
+        document.addEventListener("city").innerHtml = savedData.city;
+        document.addEventListener("temp").innerHtml = savedData.temp;
+        document.addEventListener("description").innerHtml = savedData.description;
+        document.addEventListener("content").innerHtml = savedData.feelings;
+    }
+    catch(error){
+        console.log("error");
+    }
 }
-
-.holder{
-
-}
-
-.entry{
-    background: rgba(59, 74, 107, .4);
-}
-
-#entryHolder{
-
-}
-
-#date{
-
-}
-
-#temp{
-
-}
-
-#content{
-
-}
-
-.headline {
-
-}
-.title{
-
-}
-
-/*  Basic Styling To Override Default For Basic HTML Elements */
-label{
-    display:block;
-    font-size: 27px;
-}
-
-input{
-    display:block;
-    height: 60px;
-    width: 320px;
-    background:#22b2da;
-    color: #f0d43a;
-    font-size: 20px;
-    font-family: 'Oswald', sans-serif;
-    border: none;
-}
-
-button{
-    width: 400px;
-    height: 100px;
-    background: #3b4a6b;
-    color: #f0d43a;
-    font-size: 26px;
-    font-family: 'Oswald', sans-serif;
-    border: none;
-    box-shadow: 2px 4px 5px #444;
-}
-h1{
-    font-size: 36px;
-}
-
-textarea{
-    background:#22b2da;
-    color: #f0d43a;
-    font-size: 20px;
-    font-family: 'Oswald', sans-serif;
-}
-/* Reset style for HTML element on active to have no border*/
-input:focus,
-select:focus,
-textarea:focus,
-button:focus {
-    outline: none;
-}
-/* Style for Placeholder Text*/
-::placeholder { /* Firefox, Chrome, Opera */ 
-    color: #f0d43a; 
-    font-family: 'Oswald', sans-serif;
-
-} 
-  
-:-ms-input-placeholder { /* Internet Explorer 10-11 */ 
-    color: #f0d43a; 
-    font-family: 'Oswald', sans-serif;
-
-} 
-  
-::-ms-input-placeholder { /* Microsoft Edge */ 
-    color: #f0d43a; 
-    font-family: 'Oswald', sans-serif;
-
-} 
